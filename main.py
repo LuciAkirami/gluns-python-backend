@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from myapp.routers import ai_api, bigdata_api
+from myapp.routers import ai_router, bigdata_router
 
 app = FastAPI()
-app.include_router(ai_api.router, prefix="/ai")
-app.include_router(bigdata_api.router, prefix="/bigdata")
+app.include_router(ai_router, prefix="/ai")
+app.include_router(bigdata_router, prefix="/bigdata")
 
 if __name__ == "__main__":
     import uvicorn

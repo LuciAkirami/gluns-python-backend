@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=dev
+    depends_on:
+      - vector-db
+
+  vector-db:
+    image: faiss/faiss-cpu:latest
+    ports:
+      - "8080:8080"
