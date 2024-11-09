@@ -1,9 +1,19 @@
 # import openai  # Assuming you're using OpenAI API; replace with your model 
-from prompts import USER_PROMPT
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from main import InputRequest
 from typing import List
+
+USER_PROMPT = """
+Answer the user question based on the above provided history and below context
+
+CONTEXT:
+{context}
+
+USER_QUESTION:
+{query}
+"""
+
 
 llm = ChatGroq(
     model="llama-3.1-70b-versatile",
