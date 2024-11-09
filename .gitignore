@@ -69,4 +69,6 @@ db/.database
 # System files
 .DS_Store
 Thumbs.db
+
 .idea/
+
