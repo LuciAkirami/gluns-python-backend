@@ -2,7 +2,7 @@ from enum import Enum
 from fastapi import FastAPI ,HTTPException
 from pydantic import BaseModel
 from typing import List , Tuple
-from .services import ai_service
+from services import ai_service
 
 app = FastAPI()
 #app.include_router(ai_api.router, prefix="/api/v1/chat", tags=["Chat"])
