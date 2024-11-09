@@ -69,3 +69,9 @@ db/.database
 # System files
 .DS_Store
 Thumbs.db
+.idea/.gitignore
+.idea/gluns-python-backend.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/vcs.xml
