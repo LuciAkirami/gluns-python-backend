@@ -1,7 +1,7 @@
 from enum import Enum
 from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import List
+from typing import List , Tuple
 from .services import ai_service
 
 app = FastAPI()
@@ -39,13 +39,8 @@ class InputRequest(BaseModel):
 class OutputResponse(BaseModel):
     output: str
     
-chat_history_db = {
-    1: [" "],
-    2: [" "]
-}
-def fetch_chat_history(user_id: int) -> List[str]:
-    # Fetch chat history from the dummy database 
-    return chat_history_db.get(user_id, [])
+class ChatHistoryResponse(BaseModel):
+    history: List[Tuple[str, str]]
 
 @app.get("/")
 async def root():
@@ -79,12 +74,19 @@ async def post_chat(user_input: UserInputRequest):
         "body": response_data
     }
 
+@app.get("/api/v1/output", response_model=ChatHistoryResponse)
+async def get_chat_history(user_id: int):
+    history = user_chat_history.get(user_id)
+    if history is None:
+        raise HTTPException(status_code=404, detail="Chat history not found for the specified user.")
+    return ChatHistoryResponse(history=history)
+
 # Dummy endpoint for testing
 @app.post("/api/v1/output", response_model=OutputResponse)
 async def get_output(request: InputRequest):
     # Here you can implement your logic, for now we are returning dummy output
     try:
-        chat_history = fetch_chat_history(request.userId)
+        istory = fetch_chat_history(request.userId)
         # Call the function from ai_service to process with LLM
         output = ai_service.process_with_llm(request)
         return OutputResponse(output=output)
