@@ -14,8 +14,7 @@ llm = ChatGroq(
 )
 
 
-def process_with_llm(user_request: InputRequest, history: List[List[str,str]]) -> str:
-    # Placeholder for actual model call
+def process_with_llm(user_request: InputRequest, history: List[List[str]]) -> str:
     try:
         conversation_list = []
 
@@ -25,7 +24,7 @@ def process_with_llm(user_request: InputRequest, history: List[List[str,str]]) -
 
         chat_template = ChatPromptTemplate([
             ("system", "You are a helpful Bank Assistant. Answer in short responses."),
-            ("placeholder", "{conversation}")
+            ("placeholder", "{conversation}"),
             ("human", f"{USER_PROMPT}"),
         ])
 
