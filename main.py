@@ -21,7 +21,8 @@ class ContextEnum(str, Enum):
 class UserInputRequest(BaseModel):
     context: ContextEnum
     input: str
-    userId: int
+    userId: str
+    chatHistoryId: int
 class ContextResponse(BaseModel):
     message: str
     body: List[str]
@@ -34,7 +35,8 @@ class ChatResponse(BaseModel):
 class InputRequest(BaseModel):
     context: ContextEnum
     input: str
-    userId: int
+    userId: str
+    chatHistoryId: int
 
 # Response model for output
 class OutputResponse(BaseModel):
@@ -88,7 +90,7 @@ async def get_chat_history(user_id: int):
         raise HTTPException(status_code=404, detail="Chat history not found for the specified user.")
     return ChatHistoryResponse(history=history)
 
-# Dummy endpoint for testing
+
 @app.post("/api/v1/output", response_model=OutputResponse)
 async def get_output(request: InputRequest):
     # Here you can implement your logic, for now we are returning dummy output
@@ -101,3 +103,20 @@ async def get_output(request: InputRequest):
         print(f"Error during processing: {e}")
         return OutputResponse(output="Error in processing request.")
     
+#  POST /api/v1/chat/{chatHistoryId}/{userId} - Handle user input with context and text based on chatHistoryId and userId
+@app.post("/api/v1/chat/{chatHistoryId}/{userId}", response_model=ChatResponse)
+async def post_chat(chatHistoryId: int, userId: str, user_input: UserInputRequest):
+    # Simulate processing the input based on the context and user-specific chat history
+    history = user_chat_history.get(chatHistoryId, [])
+    if not history:
+        raise HTTPException(status_code=404, detail="Chat history not found for the specified chatHistoryId.")
+    
+    response_data = {
+        "context": user_input.context,
+        "input": user_input.input,
+        "response": f"Processed input for {user_input.context} with userId {userId} and chatHistoryId {chatHistoryId}"
+    }
+    return {
+        "message": "User input processed successfully",
+        "body": response_data
+    }
