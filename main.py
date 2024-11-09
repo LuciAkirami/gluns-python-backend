@@ -21,7 +21,7 @@ class ContextEnum(str, Enum):
 class UserInputRequest(BaseModel):
     context: ContextEnum
     input: str
-
+    userId: int
 class ContextResponse(BaseModel):
     message: str
     body: List[str]
@@ -34,6 +34,7 @@ class ChatResponse(BaseModel):
 class InputRequest(BaseModel):
     context: ContextEnum
     input: str
+    userId: int
 
 # Response model for output
 class OutputResponse(BaseModel):
@@ -66,7 +67,7 @@ async def get_contexts():
         ]
     }
 
-# 2. POST /api/v1/chat - Handle user input with a context and text
+#  POST /api/v1/chat - Handle user input with a context and text
 @app.post("/api/v1/chat", response_model=ChatResponse)
 async def post_chat(user_input: UserInputRequest):
     # Here we will simulate processing the input based on the context
