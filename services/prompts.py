@@ -1,5 +1,5 @@
 USER_PROMPT = """
-Answer the user question based on the context
+Answer the user question based on the above provided history and below context
 
 CONTEXT:
 {context}

@@ -2,7 +2,8 @@
 from prompts import USER_PROMPT
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
-from main import UserInputRequest
+from main import InputRequest
+from typing import List
 
 llm = ChatGroq(
     model="llama-3.1-70b-versatile",
@@ -13,16 +14,24 @@ llm = ChatGroq(
 )
 
 
-def process_with_llm(user_request: UserInputRequest) -> str:
+def process_with_llm(user_request: InputRequest, history: List[List[str,str]]) -> str:
     # Placeholder for actual model call
     try:
+        conversation_list = []
+
+        for human_message, ai_message in history:
+            conversation_list.append(("human", human_message))
+            conversation_list.append(("ai", ai_message))
+
         chat_template = ChatPromptTemplate([
             ("system", "You are a helpful Bank Assistant. Answer in short responses."),
+            ("placeholder", "{conversation}")
             ("human", f"{USER_PROMPT}"),
         ])
 
 
         messages = chat_template.invoke({
+                        "conversation": conversation_list
                         "context":user_request.context.value,
                         "query":user_request.input
                     })
