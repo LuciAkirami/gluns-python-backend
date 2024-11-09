@@ -38,6 +38,14 @@ class InputRequest(BaseModel):
 # Response model for output
 class OutputResponse(BaseModel):
     output: str
+    
+chat_history_db = {
+    1: [" "],
+    2: [" "]
+}
+def fetch_chat_history(user_id: int) -> List[str]:
+    # Fetch chat history from the dummy database 
+    return chat_history_db.get(user_id, [])
 
 @app.get("/")
 async def root():
@@ -76,9 +84,11 @@ async def post_chat(user_input: UserInputRequest):
 async def get_output(request: InputRequest):
     # Here you can implement your logic, for now we are returning dummy output
     try:
+        chat_history = fetch_chat_history(request.userId)
         # Call the function from ai_service to process with LLM
         output = ai_service.process_with_llm(request)
         return OutputResponse(output=output)
     except Exception as e:
         print(f"Error during processing: {e}")
         return OutputResponse(output="Error in processing request.")
+    
