@@ -1,0 +1,71 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+
+# Environment Variables
+.env
+.env.*
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# FastAPI cache and compiled files
+__pycache__/
+*.pytest_cache
+*.mypy_cache
+*.coverage
+
+
+# Ignore local PostgreSQL files (optional, if used)
+postgres_data/
+
+# Ignore vector database files
+vector_data/
+
+# Ignore Python-specific files and directories
+.idea/                # PyCharm/IDEA
+.vscode/              # VS Code
+
+# Python Packaging
+build/
+dist/
+*.egg
+MANIFEST
+
+# Jupyter Notebook checkpoints (if any)
+.ipynb_checkpoints
+
+# Coverage and testing
+.coverage
+.coverage.*
+.cache
+.tox
+.pytest_cache/
+htmlcov/
+
+# Logs and dumps
+*.log
+*.pot
+*.mo
+*.log
+*.out
+*.h5
+*.npy
+*.png
+*.jpg
+
+# Ignore database connection details
+db/database.pyc
+db/.database
+
+# System files
+.DS_Store
+Thumbs.db

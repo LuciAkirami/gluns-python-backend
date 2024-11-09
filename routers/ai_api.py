@@ -1,11 +1,21 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from ..services.ai_service import process_with_llm
+from ..db.database import store_user_context
 
-ai_router = APIRouter()
+router = APIRouter()
 
-@ai_router.get("/models")
-def get_models():
-    return {"models": ["model1", "model2", "model3"]}
+class TextRequest(BaseModel):
+    user_id: str
+    text: str
 
-@ai_router.post("/inference")
-def run_inference(data: dict):
-    return {"results": [1, 2, 3]}
+@router.post("/process_text")
+async def process_text(request: TextRequest):
+    # Process text with LLM
+    try:
+        response = process_with_llm(request.text)
+        # Store the response in the database
+        store_user_context({"user_id": request.user_id, "response": response})
+        return {"response": response}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -2,6 +2,6 @@
 
 # Document each step
 
-# Routes to interact with ai & bigdata (mostly excels)
+# Routes to interact with ai(LLM) and DB
 
-# loca setup to test apis
+# local setup (Docker compose and dockerfile) 

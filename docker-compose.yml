@@ -1,18 +1,22 @@
-version: "3"
+version: "3.8"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  python-api:
+    build: .
     ports:
       - "8000:8000"
     environment:
-      - ENVIRONMENT=dev
+      - DATABASE_URL=mongodb://db:27017
+      - OPENAI_API_KEY=${OPENAI_API_KEY} # Make sure to set this in .env file
     depends_on:
-      - vector-db
+      - db
 
-  vector-db:
-    image: faiss/faiss-cpu:latest
+  db:
+    image: mongo:latest
     ports:
-      - "8080:8080"
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
