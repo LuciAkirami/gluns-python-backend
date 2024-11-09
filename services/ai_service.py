@@ -31,7 +31,7 @@ def process_with_llm(user_request: InputRequest, history: List[List[str,str]]) -
 
 
         messages = chat_template.invoke({
-                        "conversation": conversation_list
+                        "conversation": conversation_list,
                         "context":user_request.context.value,
                         "query":user_request.input
                     })
