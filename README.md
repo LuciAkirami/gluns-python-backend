@@ -128,8 +128,8 @@ docker compose up -d
 - Access the interactive Swagger UI documentation at http://localhost:8000/docs.
 
 - **References**: 
-- FastAPI Documentation: https://fastapi.tiangolo.com/
-- Python 3.10 Documentation: https://docs.python.org/3.10/
-- Pydantic Documentation: https://pydantic-docs.helpmanual.io/
-- Docker Documentation: https://docs.docker.com/
-- Uvicorn ASGI Server: https://www.uvicorn.org/
+-> FastAPI Documentation: https://fastapi.tiangolo.com/
+-> Python 3.10 Documentation: https://docs.python.org/3.10/
+-> Pydantic Documentation: https://pydantic-docs.helpmanual.io/
+-> Docker Documentation: https://docs.docker.com/
+-> Uvicorn ASGI Server: https://www.uvicorn.org/
