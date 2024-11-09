@@ -2,7 +2,6 @@ from enum import Enum
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
-from .routers import ai_api
 
 app = FastAPI()
 #app.include_router(ai_api.router, prefix="/api/v1/chat", tags=["Chat"])
