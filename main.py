@@ -1,5 +1,5 @@
 from enum import Enum
-from fastapi import FastAPI
+from fastapi import FastAPI ,HTTPException
 from pydantic import BaseModel
 from typing import List , Tuple
 from .services import ai_service
@@ -41,6 +41,12 @@ class OutputResponse(BaseModel):
     
 class ChatHistoryResponse(BaseModel):
     history: List[Tuple[str, str]]
+    
+# Mocked chat history data for users
+user_chat_history = {
+    1: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
+    2: [["How do I manage bills?", "Set a monthly budget and prioritize essentials."]],
+}
 
 @app.get("/")
 async def root():
@@ -74,7 +80,7 @@ async def post_chat(user_input: UserInputRequest):
         "body": response_data
     }
 
-@app.get("/api/v1/output", response_model=ChatHistoryResponse)
+@app.get("/api/v1/chat-history/{user_id}", response_model=ChatHistoryResponse)
 async def get_chat_history(user_id: int):
     history = user_chat_history.get(user_id)
     if history is None:
@@ -86,9 +92,9 @@ async def get_chat_history(user_id: int):
 async def get_output(request: InputRequest):
     # Here you can implement your logic, for now we are returning dummy output
     try:
-        istory = fetch_chat_history(request.userId)
+        chat_history = user_chat_history.get(request.userId, [])
         # Call the function from ai_service to process with LLM
-        output = ai_service.process_with_llm(request)
+        output = ai_service.process_with_llm(request , chat_history)
         return OutputResponse(output=output)
     except Exception as e:
         print(f"Error during processing: {e}")
