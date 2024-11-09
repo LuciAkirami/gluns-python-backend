@@ -83,9 +83,9 @@ async def post_chat(user_input: UserInputRequest):
         "body": response_data
     }
 
-@app.get("/api/v1/chat-history/{user_id}", response_model=ChatHistoryResponse)
-async def get_chat_history(user_id: int):
-    history = user_chat_history.get(user_id)
+@app.get("/api/v1/{chatMessageID}", response_model=ChatHistoryResponse)
+async def get_chat_history(request: InputRequest):
+    history = user_chat_history.get(request.userId)
     if history is None:
         raise HTTPException(status_code=404, detail="Chat history not found for the specified user.")
     return ChatHistoryResponse(history=history)
@@ -95,7 +95,7 @@ async def get_chat_history(user_id: int):
 async def get_output(request: InputRequest):
     # Here you can implement your logic, for now we are returning dummy output
     try:
-        chat_history = user_chat_history.get(request.userId, [])
+        chat_history = user_chat_history.get(request.chatHistoryId, {}).get(request.userId, [])
         # Call the function from ai_service to process with LLM
         output = ai_service.process_with_llm(request , chat_history)
         return OutputResponse(output=output)
@@ -105,16 +105,16 @@ async def get_output(request: InputRequest):
     
 #  POST /api/v1/chat/{chatHistoryId}/{userId} - Handle user input with context and text based on chatHistoryId and userId
 @app.post("/api/v1/chat/{chatHistoryId}/{userId}", response_model=ChatResponse)
-async def post_chat(chatHistoryId: int, userId: str, user_input: UserInputRequest):
+async def post_chat(user_input: UserInputRequest):
     # Simulate processing the input based on the context and user-specific chat history
-    history = user_chat_history.get(chatHistoryId, [])
+    history = user_chat_history.get(user_input.chatHistoryId, [])
     if not history:
         raise HTTPException(status_code=404, detail="Chat history not found for the specified chatHistoryId.")
     
     response_data = {
         "context": user_input.context,
         "input": user_input.input,
-        "response": f"Processed input for {user_input.context} with userId {userId} and chatHistoryId {chatHistoryId}"
+        "response": f"Processed input for {user_input.context} with userId {user_input.userId} and chatHistoryId {chatHistoryId}"
     }
     return {
         "message": "User input processed successfully",
