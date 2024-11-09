@@ -1,6 +1,7 @@
 fastapi
 uvicorn
 pydantic
+requests
 openai            # Change based on LLM
 pymongo           # For MongoDB connection or can be postgres or vector
 pinecone-client   # vector DB ( still to choose)
