@@ -53,7 +53,7 @@ Flow Diagram:
 ### 2. `POST /api/v1/chat`
 - **Description**: Handle user input with context and text.
 - **Response**:
- ```json
+```json
     {
       "message": "User input processed successfully",
       "body": {
@@ -62,33 +62,30 @@ Flow Diagram:
         "response": "Processed input for CAPITAL_MANAGEMENT"
       }
     }
-	```
+```
 ### 3. `GET /api/v1/{chatMessageID}`
 - **Description**: Retrieve chat history for a specific user.
 - **Response**:
-```json
+ ```json
     {
       "history": [
         ["Hello, how can I save?", "Try saving 20% of your income"],
         ["What’s the best investment?", "Consider low-risk options like bonds"]
       ]
     }
-```
+ ```
 ### 4. `POST /api/v1/output`
 - **Description**: Process user input with LLM using chat history for context.
-- **Request Body**:
-```json
-Response:
-
+- **Response:**:
+ ```json
 {
   "output": "Processed chat history with LLM based on input and context."
 }
 ```
 ### 5. `POST /api/v1/chat/{chatHistoryId}/{userId}`
 - **Description**: Process user chat history using chathistoryid and userid
-- **Request Body**:
+- **Response:**:
 ```json
-Response:
 {
     "output": "Processed input for {user_input.context} with userId {user_input.userId} and chatHistoryId {chatHistoryId}"
 }
@@ -116,8 +113,8 @@ pip install -r requirements.txt
 
 uvicorn main:app --reload
 ```
-The application will be running at http://localhost:8000.
-Access the interactive Swagger UI documentation at http://localhost:8000/docs.
+- The application will be running at http://localhost:8000.
+- Access the interactive Swagger UI documentation at http://localhost:8000/docs.
 
 2. Docker
 
@@ -127,8 +124,8 @@ cd python-back
 docker compose build
 docker compose up -d 
 ```
-The application will be running at http://localhost:8000 inside the Docker container.
-Access the interactive Swagger UI documentation at http://localhost:8000/docs.
+- The application will be running at http://localhost:8000 inside the Docker container.
+- Access the interactive Swagger UI documentation at http://localhost:8000/docs.
 
 - **References**: 
 - FastAPI Documentation: https://fastapi.tiangolo.com/
