@@ -28,6 +28,15 @@ class ContextResponse(BaseModel):
 class ChatResponse(BaseModel):
     message: str
     body: dict
+    
+# Request model for input
+class InputRequest(BaseModel):
+    context: ContextEnum
+    input: str
+
+# Response model for output
+class OutputResponse(BaseModel):
+    output: str
 
 @app.get("/")
 async def root():
@@ -60,3 +69,9 @@ async def post_chat(user_input: UserInputRequest):
         "message": "User input processed successfully",
         "body": response_data
     }
+
+# Dummy endpoint for testing
+@app.post("/api/v1/output", response_model=OutputResponse)
+async def get_output(request: InputRequest):
+    # Here you can implement your logic, for now we are returning dummy output
+    return OutputResponse(output="DummyInput")
