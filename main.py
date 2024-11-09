@@ -2,6 +2,7 @@ from enum import Enum
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
+from .services import ai_service
 
 app = FastAPI()
 #app.include_router(ai_api.router, prefix="/api/v1/chat", tags=["Chat"])
@@ -74,4 +75,10 @@ async def post_chat(user_input: UserInputRequest):
 @app.post("/api/v1/output", response_model=OutputResponse)
 async def get_output(request: InputRequest):
     # Here you can implement your logic, for now we are returning dummy output
-    return OutputResponse(output="DummyInput")
+    try:
+        # Call the function from ai_service to process with LLM
+        output = ai_service.process_with_llm(request)
+        return OutputResponse(output=output)
+    except Exception as e:
+        print(f"Error during processing: {e}")
+        return OutputResponse(output="Error in processing request.")
