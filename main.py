@@ -1,8 +1,13 @@
 from enum import Enum
-from fastapi import FastAPI ,HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 from typing import List , Tuple
 from services import ai_service
+from services.SummaryService import SummaryService
+from services.bd_tips.modelDTO.TransactionData import TransactionDataResponse
+
+FILEPATH = "./services/bd_tips/datasets/summary_monthly_user.csv"
+transaction_service = SummaryService(FILEPATH)
 
 app = FastAPI()
 #app.include_router(ai_api.router, prefix="/api/v1/chat", tags=["Chat"])
@@ -105,7 +110,7 @@ async def get_output(request: InputRequest):
     
 #  POST /api/v1/chat/{chatHistoryId}/{userId} - Handle user input with context and text based on chatHistoryId and userId
 @app.post("/api/v1/chat/{chatHistoryId}/{userId}", response_model=ChatResponse)
-async def post_chat(user_input: UserInputRequest):
+async def post_chat(user_input: UserInputRequest, chatHistoryId=None):
     # Simulate processing the input based on the context and user-specific chat history
     history = user_chat_history.get(user_input.chatHistoryId, [])
     if not history:
@@ -120,3 +125,16 @@ async def post_chat(user_input: UserInputRequest):
         "message": "User input processed successfully",
         "body": response_data
     }
+
+@app.get("/api/v1/chat/summary", response_model=List[TransactionDataResponse])
+async def get_transactions(
+    random: bool = Query(False, description="If true, selects transactions for a random user")
+):
+    """Fetch transactions data for a random user if random=True, otherwise for all users from the CSV file using TransactionService."""
+    try:
+        transactions = transaction_service.load_transaction_data(random_choice=random)
+        return transactions
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error retrieving transaction data")
