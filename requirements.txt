@@ -7,5 +7,5 @@ pymongo           # For MongoDB connection or can be postgres or vector
 pinecone-client   # vector DB ( still to choose)
 langchain-groq
 pandas
-
+python-dotenv
 

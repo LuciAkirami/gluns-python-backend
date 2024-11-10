@@ -1,3 +1,9 @@
+from dotenv import load_dotenv
+import logging
+
+load_dotenv()
+logging.basicConfig(level=logging.DEBUG)
+
 from enum import Enum
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
@@ -52,8 +58,25 @@ class ChatHistoryResponse(BaseModel):
     
 # Mocked chat history data for users
 user_chat_history = {
+    0: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
     1: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
     2: [["How do I manage bills?", "Set a monthly budget and prioritize essentials."]],
+    3: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
+    4: [["How do I manage bills?", "Set a monthly budget and prioritize essentials."]],
+    5: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
+    6: [["How do I manage bills?", "Set a monthly budget and prioritize essentials."]],
+    7: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
+    8: [["How do I manage bills?", "Set a monthly budget and prioritize essentials."]],
+    9: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
+    10: [["How do I manage bills?", "Set a monthly budget and prioritize essentials."]],
+    11: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
+    12: [["How do I manage bills?", "Set a monthly budget and prioritize essentials."]],
+    13: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
+    14: [["How do I manage bills?", "Set a monthly budget and prioritize essentials."]],
+    15: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
+    16: [["How do I manage bills?", "Set a monthly budget and prioritize essentials."]],
+    17: [["Hello, how can I save?", "Try saving 20% of your income"], ["What’s the best investment?", "Consider low-risk options like bonds"]],
+    18: [["How do I manage bills?", "Set a monthly budget and prioritize essentials."]]
 }
 
 @app.get("/")
@@ -100,13 +123,23 @@ async def get_chat_history(request: InputRequest):
 async def get_output(request: InputRequest):
     # Here you can implement your logic, for now we are returning dummy output
     try:
-        chat_history = user_chat_history.get(request.chatHistoryId, {}).get(request.userId, [])
+        print("Request received: ", request)
+
+        # Get the chat history for the user
+        node = user_chat_history.get(request.chatHistoryId, {})
+
+        # Raise an exception if the chat history is not found
+        if not node:
+            raise HTTPException(status_code=404, detail="Chat history not found for the specified chatHistoryId.")
+
+        # Get the chat history for the user
+        chat_history = next((chat for chat in node if chat[0] == request.userId), [])
         # Call the function from ai_service to process with LLM
         output = ai_service.process_with_llm(request , chat_history)
         return OutputResponse(output=output)
     except Exception as e:
         print(f"Error during processing: {e}")
-        return OutputResponse(output="Error in processing request.")
+        return OutputResponse(output="Error in processing request. Error ->  {}".format(e))
     
 #  POST /api/v1/chat/{chatHistoryId}/{userId} - Handle user input with context and text based on chatHistoryId and userId
 @app.post("/api/v1/chat/{chatHistoryId}/{userId}", response_model=ChatResponse)
