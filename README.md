@@ -114,6 +114,9 @@ cd python-back
 pip install -r requirements.txt
 
 uvicorn main:app --reload
+
+# With logs and custom port
+uvicorn main:app --reload --log-level debug --port 8001
 ```
 - The application will be running at http://localhost:8000.
 - Access the interactive Swagger UI documentation at http://localhost:8000/docs.
